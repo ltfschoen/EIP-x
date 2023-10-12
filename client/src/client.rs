@@ -38,6 +38,7 @@ pub struct ClientBuilder {
     load_external_fallback: bool,
     strict_checkpoint_age: bool,
     target_addresses: Option<Vec<Address>>,
+
 }
 
 impl ClientBuilder {
@@ -197,7 +198,7 @@ impl ClientBuilder {
         } else {
             self.strict_checkpoint_age
         };
-        
+
         let target_addresses: Option<Vec<Address>> = if self.target_addresses.is_some() {
             self.target_addresses
         } else if let Some(config) = &self.config {
@@ -273,9 +274,9 @@ impl Client {
     }
 
     pub async fn shutdown(&self) {
-        info!("shutting down");
+        info!(target: "helios::client","shutting down");
         if let Err(err) = self.node.consensus.shutdown() {
-            warn!("graceful shutdown failed: {}", err);
+            warn!(target: "helios::client", error = %err, "graceful shutdown failed");
         }
     }
 

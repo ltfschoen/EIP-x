@@ -11,11 +11,12 @@ use std::{
     str::FromStr,
     sync::{Arc, Mutex},
 };
-
 use client::{Client, ClientBuilder};
 use config::{CliConfig, Config};
 use futures::executor::block_on;
 use tracing::{error, info};
+use tracing_subscriber::filter::{EnvFilter, LevelFilter};
+use tracing_subscriber::FmtSubscriber;
 use ethers::{
     core::types::{Block, BlockId, Transaction, TransactionReceipt, H256, Address},
     providers::{Http, Middleware, Provider},
@@ -25,6 +26,17 @@ use ethers::{
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    let env_filter = EnvFilter::builder()
+        .with_default_directive(LevelFilter::INFO.into())
+        .from_env()
+        .expect("invalid env filter");
+
+    let subscriber = FmtSubscriber::builder()
+        .with_env_filter(env_filter)
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber).expect("subsriber set failed");
+
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
 //sogol addded: 
     // Initialize the Ethereum provider URL and address public key from environment variables
@@ -54,12 +66,11 @@ async fn main() -> Result<()> {
     );
     
     let config = get_config();
-
     // Create the Helios client with the specified target addresses
     let mut client = match ClientBuilder::new().config(config).build() {
         Ok(client) => client,
         Err(err) => {
-            error!("{}", err);
+            error!(target: "helios::runner", error = %err);
             exit(1);
         }
     };
@@ -119,7 +130,7 @@ async fn main() -> Result<()> {
     };
 
     if let Err(err) = client.start().await {
-        error!("{}", err);
+        error!(target: "helios::runner", error = %err);
         exit(1);
     }
 
@@ -138,11 +149,12 @@ fn register_shutdown_handler(client: Client) {
         let counter_value = *counter;
 
         if counter_value == 3 {
-            info!("forced shutdown");
+            info!(target: "helios::runner", "forced shutdown");
             exit(0);
         }
 
         info!(
+            target: "helios::runner",
             "shutting down... press ctrl-c {} more times to force quit",
             3 - counter_value
         );
@@ -167,6 +179,7 @@ fn get_config() -> Config {
 
     Config::from_file(&config_path, &cli.network, &cli_config)
 }
+
 //sogol added:
 // Fetch the block data, including the state root
 // let block_number_to_fetch = 12345; // Replace with the desired block number
@@ -185,6 +198,7 @@ async fn fetch_all_transactions(provider:Provider<Http>, blocknumber:i32)->Vec<T
     return transactions;
 
 }
+
 #[derive(Parser)]
 #[clap(version, about)]
 /// Helios is a fast, secure, and portable light client for Ethereum
