@@ -5,7 +5,7 @@ use common::types::BlockTag;
 use ethers::types::transaction::eip2930::AccessListItem;
 use eyre::{Report, Result};
 use futures::future::join_all;
-use log::trace;
+use tracing::{trace};
 use revm::{
     primitives::{
         AccountInfo, Bytecode, Env, ExecutionResult, ResultAndState, TransactTo, B160, B256, U256,

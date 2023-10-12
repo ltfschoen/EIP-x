@@ -15,7 +15,7 @@ use std::{
 use client::{Client, ClientBuilder};
 use config::{CliConfig, Config};
 use futures::executor::block_on;
-use log::{error, info};
+use tracing::{error, info};
 use ethers::{
     core::types::{Block, BlockId, Transaction, TransactionReceipt, H256, Address},
     providers::{Http, Middleware, Provider},

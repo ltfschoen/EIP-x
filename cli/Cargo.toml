@@ -11,7 +11,7 @@ path = "src/main.rs"
 # Each dependency should be listed individually
 tokio = { version = "1", features = ["full"] }
 eyre = "0.6.5"
-log = "0.4.14"
+tracing.workspace = true
 futures = "0.3.17"
 
 clap = { version = "3.2.18", features = ["derive", "env"] }

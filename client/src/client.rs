@@ -10,7 +10,7 @@ use common::types::{Block, BlockTag};
 use config::Config;
 // use ethers::prelude::FromStr;
 use execution::types::CallOpts;
-use log::{info, warn};
+use tracing::{info, warn};
 // use std::str::FromStr;
 
 use crate::node::Node;

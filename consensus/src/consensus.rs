@@ -7,7 +7,7 @@ use chrono::Duration;
 use eyre::eyre;
 use eyre::Result;
 use futures::future::join_all;
-use log::{debug, error, info, warn};
+use tracing::{debug, error, info, warn};
 use milagro_bls::PublicKey;
 use ssz_rs::prelude::*;
 use tokio::sync::mpsc::Sender;
