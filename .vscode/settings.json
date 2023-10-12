@@ -1,5 +1,5 @@
 {
     "rust-analyzer.linkedProjects": [
-        "./helios/partial_view/Cargo.toml"
+        "./partial_view/Cargo.toml"
     ]
 }

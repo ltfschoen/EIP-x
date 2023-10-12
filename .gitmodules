@@ -1,6 +1,0 @@
-[submodule "ethereum-proof"]
-	path = ethereum-proof
-	url = https://github.com/sogolmalek/ethereum-proof
-[submodule "axiom-dapp"]
-	path = axiom-dapp
-	url = https://github.com/clawbird/axiom-dapp
